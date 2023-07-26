@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 8000;
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const employeeR = require("./routes/employeeRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -8,6 +9,13 @@ const userRoutes = require("./routes/userRoutes");
 //Set bodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//Set Cors
+const corsset = { //set CORS เพื่ออนุญาติให้เข้าถึง API
+  origin: 'http://localhost:5173', //port vue js **ipที่อนุญาติให้ใช้***
+  credentials: true,
+};
+app.use(cors(corsset));
 
 //Server Check
 app.get("/", (req, res) => {
