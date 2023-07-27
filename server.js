@@ -3,12 +3,13 @@ const app = express();
 const port = 8000;
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const employeeR = require("./routes/employeeRoutes");
-const userRoutes = require("./routes/userRoutes");
+const employeeR = require("./routes/employee");
+
 
 //Set bodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 //Set Cors
 const corsset = { //set CORS เพื่ออนุญาติให้เข้าถึง API
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
 
 //Set Path
 app.use("/api/employee", employeeR);
-app.use("/api/user", userRoutes);
+
 
 //Middleware
 app.use((err, req, res, next) => {

@@ -1,4 +1,4 @@
-const db = require('./db');
+/* const db = require('./db');
 
 //QUERY STAMP DATA
 async function getMultiple(){
@@ -21,4 +21,4 @@ async function getMultiple(){
 
 module.exports = {
   getMultiple
-}
+} */
