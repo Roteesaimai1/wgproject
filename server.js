@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 //Set Path
-app.use("/api/employee", employeeR);
+app.use("/api", employeeR);
 
 
 //Middleware

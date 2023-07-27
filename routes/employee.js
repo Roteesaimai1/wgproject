@@ -4,7 +4,7 @@ const db = require('../db');
 
 
 //get all user 
-router.get('/', (req, res) => {
+router.get('/employee', (req, res) => {
   const query = 'SELECT * FROM employee';
 
   db.query(query, (err, results) => {
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 })
 
 //Get user from id
-router.get('/:id', (req, res) => {
+router.get('/employee/:id', (req, res) => {
   const id = req.params.id;
   const query = 'SELECT * FROM employee WHERE id = ?';
 
@@ -33,21 +33,33 @@ router.get('/:id', (req, res) => {
 })
 
 //Query from DATE
-router.get('/data',  (req, res) => {
-  const { date } = req.query; 
-  try {
-    const connection =  mysql.createConnection(dbConfig);
-    const [results] =  connection.execute(
-      `SELECT fs.id, fs.status, fs.days, fs.money, fs.date_stamp, e.name, e.title FROM employee e INNER JOIN food_stamp fs ON e.id = fs.employee_id WHERE fs.date_stamp = ?`,
-      [date]
-    );
-    /* connection.end(); */
-
+router.get('/data/:date', (req, res) => {
+  const date = req.params.date;
+  const query = 'SELECT fs.id, fs.status, fs.days, fs.money, fs.date_stamp, e.name, e.title FROM employee e INNER JOIN food_stamp fs ON e.id = fs.employee_id WHERE fs.date_stamp = ?' 
+  
+  db.query(query, [date], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).json({ error: 'Error executing query' });
+      return;
+    }
     res.json(results);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).json({ error: "Failed to fetch data" });
-  }  
+  })
+})
+
+//minicard
+router.get('/minicard/:date', (req, res) => {
+  const date = req.params.date;
+  const query = 'SELECT SUM(money) AS total_money FROM food_stamp WHERE date_stamp = ?' 
+  
+  db.query(query, [date], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).json({ error: 'Error executing query' });
+      return;
+    }
+    res.json(results);
+  })
 })
 
 
