@@ -5,7 +5,7 @@ const db = require('../db');
 
 //get all user 
 router.get('/employee', (req, res) => {
-  const query = 'SELECT * FROM employee';
+  const query = 'SELECT e.id, e.name, e.title, SUM(f.money) AS total_amount, SUM(f.days) AS total_days FROM employee e JOIN food_stamp f ON e.id = f.employee_id WHERE f.date_stamp BETWEEN "2023-07-20" AND "2023-07-30" GROUP BY e.id, e.name, e.title; ';
 
   db.query(query, (err, results) => {
     if (err) {
@@ -13,24 +13,22 @@ router.get('/employee', (req, res) => {
       res.status(500).json({ error: 'Error executing query' });
       return;
     }
-    res.json(results);
+       
+    res.json(results);   
   })
 })
+
+
 
 //Get user from id
-router.get('/employee/:id', (req, res) => {
-  const id = req.params.id;
-  const query = 'SELECT * FROM employee WHERE id = ?';
+router.get('/employee/nowtime', (req, res) => {
+  
+  const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() + 7);
+  res.json({ date: currentDate});
 
-  db.query(query, [id], (err, results) => {
-    if (err) {
-      console.error('Error executing query:', err);
-      res.status(500).json({ error: 'Error executing query' });
-      return;
-    }
-    res.json(results);
-  })
 })
+
 
 //Query from DATE
 router.get('/data/:date', (req, res) => {
@@ -46,6 +44,7 @@ router.get('/data/:date', (req, res) => {
     res.json(results);
   })
 })
+
 
 //minicard
 router.get('/minicard/:date', (req, res) => {
