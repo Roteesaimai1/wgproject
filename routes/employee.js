@@ -5,7 +5,7 @@ const db = require('../db');
 
 //get all user 
 router.get('/employee', (req, res) => {
-  const query = 'SELECT e.id, e.name, e.title, SUM(f.money) AS total_amount, SUM(f.days) AS total_days FROM employee e JOIN food_stamp f ON e.id = f.employee_id WHERE f.date_stamp BETWEEN "2023-07-20" AND "2023-07-30" GROUP BY e.id, e.name, e.title; ';
+  const query = 'SELECT e.id, e.name, e.title, SUM(f.money) AS total_amount, SUM(f.days) AS total_days FROM employee e JOIN food_stamp f ON e.id = f.employee_id WHERE f.date_stamp BETWEEN "2023-07-20" AND "2023-08-30" GROUP BY e.id, e.name, e.title; ';
 
   db.query(query, (err, results) => {
     if (err) {
@@ -44,6 +44,31 @@ router.get('/data/:date', (req, res) => {
     res.json(results);
   })
 })
+
+//post data
+router.post('/employeecreate', (req, res) => {
+  const { employee_id, status, days, money, date_stamp } = req.body;
+
+  
+  if (employee_id !== null && employee_id !== undefined) {
+    const query = 'INSERT INTO food_stamp (employee_id, status, days, money, date_stamp) VALUES (?, ?, ?, ?, ?)';
+
+    db.query(query, [employee_id, status, days, money, date_stamp], (err, result) => {
+      if (err) {
+        console.error('Error executing SQL query:', err);
+        res.status(500).json({ error: 'Failed to save data' });
+        return;
+      }
+
+      console.log('Data saved successfully');
+      res.json({ message: 'Data saved successfully' });
+    });
+  } else {
+    console.error('Error: employee_id cannot be null');
+    res.status(400).json({ error: 'employee_id cannot be null' });
+  }
+});
+
 
 
 //minicard

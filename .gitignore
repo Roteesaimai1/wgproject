@@ -17,6 +17,11 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
+*.env
+*.env.example
+*.env.local
+*.env.staging
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -26,4 +31,3 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-*.env
