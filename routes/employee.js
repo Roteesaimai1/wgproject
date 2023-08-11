@@ -4,6 +4,20 @@ const db = require('../db');
 
 
 //get all user 
+router.get('/employee', (req, res) => {
+  const query = 'SELECT e.id, e.name, e.title, SUM(f.money) AS total_amount, SUM(f.days) AS total_days FROM employee e JOIN food_stamp f ON e.id = f.employee_id  GROUP BY e.id, e.name, e.title; ';
+
+  db.query(query,  (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).json({ error: 'Error executing query' });
+      return;
+    }
+       
+    res.json(results);   
+  })
+})
+
 router.get('/employee/:month', (req, res) => {
   const month = req.params.month;
   const query = 'SELECT e.id, e.name, e.title, SUM(f.money) AS total_amount, SUM(f.days) AS total_days FROM employee e JOIN food_stamp f ON e.id = f.employee_id WHERE MONTH(f.date_stamp) = ?  GROUP BY e.id, e.name, e.title; ';
